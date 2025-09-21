@@ -118,6 +118,18 @@
 
 					{{{ if !reputation:disabled }}}
 					<div class="d-flex votes align-items-center">
+						<span class="btn btn-ghost btn-sm">
+							<i class="fa fa-thumbs-up text-warning"></i>
+						</span>
+
+						<span class="btn btn-ghost btn-sm">
+							<i class="fa fa-heart text-danger"></i>
+						</span>
+
+						<span class="btn btn-ghost btn-sm">
+							<i class="fa fa-smile-o"></i>
+						</span>
+
 						<a component="post/upvote" href="#" class="btn btn-ghost btn-sm{{{ if posts.upvoted }}} upvoted{{{ end }}}" title="[[topic:upvote-post]]">
 							<i class="fa fa-fw fa-chevron-up text-primary"></i>
 						</a>
