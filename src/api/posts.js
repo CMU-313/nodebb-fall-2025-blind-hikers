@@ -620,6 +620,13 @@ postsAPI.notifyQueuedPostOwner = async (caller, data) => {
 	}
 };
 
+postsAPI.reaction = async function (caller, data) {
+	if (!data || !data.pid || !data.reaction) {
+		throw new Error('[[error:invalid-data]]');
+	}
+	return await posts.reaction(data.pid, caller.uid, data.reaction);
+};
+
 async function canEditQueue(uid, data, action) {
 	const [canEditQueue, queuedPost] = await Promise.all([
 		posts.canEditQueue(uid, data, action),
