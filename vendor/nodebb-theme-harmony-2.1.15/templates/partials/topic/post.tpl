@@ -118,15 +118,15 @@
 
 					{{{ if !reputation:disabled }}}
 					<div class="d-flex votes align-items-center">
-						<span class="btn btn-ghost btn-sm">
+						<span class="btn btn-ghost btn-sm" component="post/reaction" data-reaction="thumbs-up">
 							<i class="fa fa-thumbs-up text-warning"></i>
 						</span>
 
-						<span class="btn btn-ghost btn-sm">
+						<span class="btn btn-ghost btn-sm" component="post/reaction" data-reaction="heart">
 							<i class="fa fa-heart text-danger"></i>
 						</span>
 
-						<span class="btn btn-ghost btn-sm">
+						<span class="btn btn-ghost btn-sm" component="post/reaction" data-reaction="smile">
 							<i class="fa fa-smile-o"></i>
 						</span>
 
