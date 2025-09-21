@@ -131,6 +131,12 @@ Posts.unvote = async (req, res) => {
 	helpers.formatApiResponse(200, res);
 };
 
+Posts.reaction = async (req, res) => {
+	const data = await mock(req);
+	const result = await api.posts.reaction(req, { ...data, reaction: req.body.reaction });
+	helpers.formatApiResponse(200, res, result);
+};
+
 Posts.getVoters = async (req, res) => {
 	const data = await api.posts.getVoters(req, { pid: req.params.pid });
 	helpers.formatApiResponse(200, res, data);

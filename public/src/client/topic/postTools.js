@@ -7,12 +7,13 @@ define('forum/topic/postTools', [
 	'components',
 	'translator',
 	'forum/topic/votes',
+	'forum/topic/reactions',
 	'api',
 	'bootbox',
 	'alerts',
 	'hooks',
 	'helpers',
-], function (share, navigator, components, translator, votes, api, bootbox, alerts, hooks, helpers) {
+], function (share, navigator, components, translator, votes, reactions, api, bootbox, alerts, hooks, helpers) {
 	const PostTools = {};
 
 	let staleReplyAnyway = false;
@@ -143,6 +144,11 @@ define('forum/topic/postTools', [
 
 		postContainer.on('click', '[component="post/announce-count"]', function () {
 			votes.showAnnouncers(getData($(this), 'data-pid'));
+		});
+
+		postContainer.on('click', '[component="post/reaction"]', function () {
+			const reaction = $(this).attr('data-reaction');
+			return reactions.toggleReaction($(this), reaction);
 		});
 
 		postContainer.on('click', '[component="post/flag"]', function () {
