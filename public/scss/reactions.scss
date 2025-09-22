@@ -1,0 +1,57 @@
+// Reaction count styling
+.reaction-count {
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--bs-secondary);
+	line-height: 1;
+	
+	&.hidden {
+		display: none !important;
+	}
+}
+
+[component="post/reaction"] {
+	transition: all 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	min-width: auto;
+	
+	&.reacted {
+		background-color: #f8f9fa;
+		border-color: var(--bs-border-color);
+		border-width: 2px;
+		transform: scale(1.05);
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		box-shadow: 0 0 0 2px var(--bs-secondary);
+		
+		.reaction-count {
+			color: var(--bs-secondary);
+			font-weight: 700;
+		}
+	}
+	
+	&:hover {
+		transform: scale(1.02);
+		
+		&.reacted {
+			transform: scale(1.08);
+		}
+		
+		.reaction-count {
+			transform: scale(1.1);
+		}
+	}
+}
+
+// Ensure reaction buttons have proper spacing
+.votes {
+	[component="post/reaction"] {
+		margin-right: 0.25rem;
+		
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+}
