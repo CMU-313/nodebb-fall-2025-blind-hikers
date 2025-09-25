@@ -344,6 +344,37 @@ PostDataObject:
               type: boolean
         selfPost:
           type: boolean
+        reactions:
+          type: object
+          description: Reaction data for this post
+          properties:
+            "thumbs-up":
+              type: object
+              properties:
+                count:
+                  type: number
+                  description: Number of thumbs-up reactions
+                hasReacted:
+                  type: boolean
+                  description: Whether the current user has reacted with thumbs-up
+            heart:
+              type: object
+              properties:
+                count:
+                  type: number
+                  description: Number of heart reactions
+                hasReacted:
+                  type: boolean
+                  description: Whether the current user has reacted with heart
+            smile:
+              type: object
+              properties:
+                count:
+                  type: number
+                  description: Number of smile reactions
+                hasReacted:
+                  type: boolean
+                  description: Whether the current user has reacted with smile
         events:
           type: array
           items:
