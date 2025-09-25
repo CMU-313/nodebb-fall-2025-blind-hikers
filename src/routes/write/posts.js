@@ -29,6 +29,9 @@ module.exports = function () {
 	setupApiRoute(router, 'get', '/:pid/voters', [middleware.assert.post], controllers.write.posts.getVoters);
 	setupApiRoute(router, 'get', '/:pid/upvoters', [middleware.assert.post], controllers.write.posts.getUpvoters);
 
+	setupApiRoute(router, 'put', '/:pid/reaction', [...middlewares, middleware.checkRequired.bind(null, ['reaction'])], controllers.write.posts.reaction);
+	setupApiRoute(router, 'delete', '/:pid/reaction', middlewares, controllers.write.posts.reaction);
+
 	setupApiRoute(router, 'get', '/:pid/announcers', [middleware.assert.post], controllers.write.posts.getAnnouncers);
 	setupApiRoute(router, 'get', '/:pid/announcers/tooltip', [middleware.assert.post], controllers.write.posts.getAnnouncersTooltip);
 	setupApiRoute(router, 'put', '/:pid/bookmark', middlewares, controllers.write.posts.bookmark);

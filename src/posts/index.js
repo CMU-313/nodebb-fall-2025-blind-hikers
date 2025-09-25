@@ -22,6 +22,7 @@ require('./summary')(Posts);
 require('./recent')(Posts);
 require('./tools')(Posts);
 require('./votes')(Posts);
+require('./reactions')(Posts);
 require('./bookmarks')(Posts);
 require('./queue')(Posts);
 require('./diffs')(Posts);
