@@ -23,6 +23,9 @@ define('forum/topic/postTools', [
 
 		renderMenu();
 
+		// Initialize custom reaction tooltips
+		reactions.init();
+
 		addPostHandlers(tid);
 
 		share.addShareHandlers(ajaxify.data.titleRaw);

@@ -8,6 +8,20 @@ define('forum/topic/reactions', [
 ], function (api, hooks, alerts) {
 	const Reactions = {};
 
+	Reactions.init = function () {
+		// Disable default browser tooltips for reaction buttons
+		$('[component="post/reaction"]').each(function () {
+			const $this = $(this);
+			const title = $this.attr('title');
+			if (title) {
+				// Store the title as a data attribute for CSS access
+				$this.attr('data-original-title', title);
+				// Remove the title attribute to prevent default tooltip
+				$this.removeAttr('title');
+			}
+		});
+	};
+
 	Reactions.toggleReaction = function (button, reactionType) {
 		const post = button.closest('[data-pid]');
 		const pid = post.attr('data-pid');
