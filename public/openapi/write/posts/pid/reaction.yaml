@@ -1,0 +1,146 @@
+put:
+  tags:
+    - posts
+  summary: react to a post
+  description: This operation adds a reaction to a post.
+  parameters:
+    - in: path
+      name: pid
+      schema:
+        type: string
+      required: true
+      description: a valid post id
+      example: 2
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            reaction:
+              type: string
+              description: The type of reaction to add
+              enum:
+                - thumbs-up
+                - heart
+                - smile
+              example: thumbs-up
+          required:
+            - reaction
+  responses:
+    '200':
+      description: Post successfully reacted to
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                $ref: ../../../components/schemas/Status.yaml#/Status
+              response:
+                type: object
+                properties:
+                  post:
+                    type: object
+                    properties:
+                      pid:
+                        type: number
+                      uid:
+                        type: number
+                      tid:
+                        type: number
+                  reaction:
+                    type: string
+                    description: The type of reaction
+                    enum:
+                      - thumbs-up
+                      - heart
+                      - smile
+                  count:
+                    type: number
+                    description: The current count of this reaction type on the post
+                  hasReacted:
+                    type: boolean
+                    description: Whether the current user has reacted to this post with this reaction type
+    '400':
+      $ref: ../../../components/responses/400.yaml#/400
+    '401':
+      $ref: ../../../components/responses/401.yaml#/401
+    '403':
+      $ref: ../../../components/responses/403.yaml#/403
+    '500':
+      $ref: ../../../components/responses/500.yaml#/500
+delete:
+  tags:
+    - posts
+  summary: remove reaction from a post
+  description: This operation removes a reaction from a post.
+  parameters:
+    - in: path
+      name: pid
+      schema:
+        type: string
+      required: true
+      description: a valid post id
+      example: 2
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            reaction:
+              type: string
+              description: The type of reaction to remove
+              enum:
+                - thumbs-up
+                - heart
+                - smile
+              example: thumbs-up
+          required:
+            - reaction
+  responses:
+    '200':
+      description: Reaction successfully removed from post
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                $ref: ../../../components/schemas/Status.yaml#/Status
+              response:
+                type: object
+                properties:
+                  post:
+                    type: object
+                    properties:
+                      pid:
+                        type: number
+                      uid:
+                        type: number
+                      tid:
+                        type: number
+                  reaction:
+                    type: string
+                    description: The type of reaction
+                    enum:
+                      - thumbs-up
+                      - heart
+                      - smile
+                  count:
+                    type: number
+                    description: The current count of this reaction type on the post
+                  hasReacted:
+                    type: boolean
+                    description: Whether the current user has reacted to this post with this reaction type
+    '400':
+      $ref: ../../../components/responses/400.yaml#/400
+    '401':
+      $ref: ../../../components/responses/401.yaml#/401
+    '403':
+      $ref: ../../../components/responses/403.yaml#/403
+    '500':
+      $ref: ../../../components/responses/500.yaml#/500
