@@ -93,8 +93,39 @@ module.exports = function (User) {
 			User.addPostIdToUser(postData),
 			User.setUserField(postData.uid, 'lastposttime', lastposttime),
 			User.updateLastOnlineTime(postData.uid),
+			updateUserStreak(postData.uid, lastposttime),
 		]);
 	};
+
+	// Update user's consecutive-day posting streak.
+	async function updateUserStreak(uid, timestamp) {
+		try {
+			// Normalize to UTC day (midnight)
+			const dayStart = new Date(new Date(timestamp).toISOString().slice(0, 10)).getTime();
+			const userData = await User.getUserFields(uid, ['streak', 'streakLastDay']);
+			let currentStreak = parseInt(userData.streak, 10) || 0;
+			const lastDay = parseInt(userData.streakLastDay, 10) || 0;
+
+			if (lastDay === dayStart) {
+				// already counted for today
+				return;
+			}
+
+			const oneDay = 24 * 60 * 60 * 1000;
+			if (lastDay === dayStart - oneDay) {
+				// consecutive day
+				currentStreak += 1;
+			} else {
+				// reset streak
+				currentStreak = 1;
+			}
+
+			await User.setUserFields(uid, { streak: currentStreak, streakLastDay: dayStart });
+		} catch (err) {
+			// don't block post creation on errors; log via plugins hook
+			plugins.hooks.fire('action:user.streakError', { uid, error: err }).catch(() => {});
+		}
+	}
 
 	User.addPostIdToUser = async function (postData) {
 		await db.sortedSetsAdd([

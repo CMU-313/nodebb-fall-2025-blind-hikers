@@ -17,6 +17,7 @@ const intFields = [
 	'banned', 'banned:expire', 'email:confirmed', 'joindate', 'lastonline',
 	'lastqueuetime', 'lastposttime', 'followingCount', 'followerCount',
 	'blocksCount', 'passwordExpiry', 'mutedUntil',
+	'streak', 'streakLastDay',
 ];
 
 module.exports = function (User) {
@@ -27,6 +28,7 @@ module.exports = function (User) {
 		'postcount', 'topiccount', 'lastposttime', 'banned', 'banned:expire',
 		'status', 'flags', 'followerCount', 'followingCount', 'cover:url',
 		'cover:position', 'groupTitle', 'mutedUntil', 'mutedReason',
+		'streak', 'streakLastDay',
 	];
 
 	let customFieldWhiteList = null;
