@@ -17,6 +17,12 @@
 	gap: 0.25rem;
 	min-width: auto;
 	
+	.emoji-reaction {
+		font-size: 1.2rem;
+		line-height: 1;
+		transition: all 0.2s ease;
+	}
+	
 	&.reacted {
 		background-color: #f8f9fa;
 		border-color: var(--bs-border-color);
@@ -30,6 +36,10 @@
 			color: var(--bs-secondary);
 			font-weight: 700;
 		}
+		
+		.emoji-reaction {
+			transform: scale(1.1);
+		}
 	}
 	
 	&:hover {
@@ -41,6 +51,11 @@
 		
 		.reaction-count {
 			transform: scale(1.1);
+		}
+		
+		.emoji-reaction {
+			transform: scale(1.15);
+			filter: brightness(1.2);
 		}
 	}
 }
