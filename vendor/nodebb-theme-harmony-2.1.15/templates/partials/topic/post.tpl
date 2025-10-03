@@ -118,18 +118,18 @@
 
 					{{{ if !reputation:disabled }}}
 					<div class="d-flex votes align-items-center">
-						<span class="btn btn-ghost btn-sm{{{ if posts.reactions.thumbs-up.hasReacted }}} reacted{{{ end }}}" component="post/reaction" data-reaction="thumbs-up">
-							<i class="fa fa-thumbs-up text-warning"></i>
+						<span class="btn btn-ghost btn-sm{{{ if posts.reactions.thumbs-up.hasReacted }}} reacted{{{ end }}}" component="post/reaction" data-reaction="thumbs-up" title="👍 :thumbs-up:">
+							<span class="emoji-reaction">👍</span>
 							<span class="reaction-count ms-1{{{ if !posts.reactions.thumbs-up.count }}} hidden{{{ end }}}" component="post/reaction-count" data-reaction="thumbs-up">{posts.reactions.thumbs-up.count}</span>
 						</span>
 
-						<span class="btn btn-ghost btn-sm{{{ if posts.reactions.heart.hasReacted }}} reacted{{{ end }}}" component="post/reaction" data-reaction="heart">
-							<i class="fa fa-heart text-danger"></i>
+						<span class="btn btn-ghost btn-sm{{{ if posts.reactions.heart.hasReacted }}} reacted{{{ end }}}" component="post/reaction" data-reaction="heart" title="❤️ :heart:">
+							<span class="emoji-reaction">❤️</span>
 							<span class="reaction-count ms-1{{{ if !posts.reactions.heart.count }}} hidden{{{ end }}}" component="post/reaction-count" data-reaction="heart">{posts.reactions.heart.count}</span>
 						</span>
 
-						<span class="btn btn-ghost btn-sm{{{ if posts.reactions.smile.hasReacted }}} reacted{{{ end }}}" component="post/reaction" data-reaction="smile">
-							<i class="fa fa-smile-o"></i>
+						<span class="btn btn-ghost btn-sm{{{ if posts.reactions.smile.hasReacted }}} reacted{{{ end }}}" component="post/reaction" data-reaction="smile" title="😊 :smile:">
+							<span class="emoji-reaction">😊</span>
 							<span class="reaction-count ms-1{{{ if !posts.reactions.smile.count }}} hidden{{{ end }}}" component="post/reaction-count" data-reaction="smile">{posts.reactions.smile.count}</span>
 						</span>
 
