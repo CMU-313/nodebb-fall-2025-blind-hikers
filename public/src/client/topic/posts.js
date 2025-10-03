@@ -412,6 +412,11 @@ define('forum/topic/posts', [
 	Posts.onNewPostsAddedToDom = async function (posts) {
 		await Posts.onTopicPageLoad(posts);
 		posts.find('.timeago').timeago();
+		
+		// Refresh emoji tooltips for new posts
+		require(['forum/topic/emojiTooltips'], function (emojiTooltips) {
+			emojiTooltips.refresh();
+		});
 	};
 
 	Posts.showBottomPostBar = function () {
