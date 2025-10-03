@@ -304,12 +304,19 @@ dashboardController.getUsers = async (req, res) => {
 	const uids = await db.getSortedSetRangeByScore('users:joindate', 0, 500, start, end);
 	const users = await user.getUsersData(uids);
 
+	// Include streak and streakLastDay directly in the user data
+	const enrichedUsers = users.map(user => ({
+		...user,
+		streak: user.streak || 0,
+		streakLastDay: user.streakLastDay || 0,
+	}));
+
 	res.render('admin/dashboard/users', {
 		set: 'registrations',
 		query: _.pick(req.query, ['units', 'until', 'count']),
 		stats,
 		summary,
-		users,
+		users: enrichedUsers,
 	});
 };
 

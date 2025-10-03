@@ -159,6 +159,14 @@ UserObject:
       type: string
       description: An ISO 8601 formatted date string representing the moment a ban will be lifted, or the words "Not Banned"
       example: Not Banned
+    streak:
+      type: number
+      description: Consecutive-day posting streak count
+      example: 3
+    streakLastDay:
+      type: number
+      description: Last day of the streak stored as a UNIX timestamp or numeric day
+      example: 1585337827953
   required:
     - uid
     - username
@@ -194,6 +202,8 @@ UserObject:
     - lastonlineISO
     - banned_until
     - banned_until_readable
+    - streak
+    - streakLastDay
 UserObjectFull:
   # accountHelpers.getUserDataByUserSlug
   type: object
@@ -360,6 +370,14 @@ UserObjectFull:
       type: string
       description: An ISO 8601 formatted date string representing the moment a ban will be lifted, or the words "Not Banned"
       example: Not Banned
+    streak:
+      type: number
+      description: Consecutive-day posting streak count
+      example: 3
+    streakLastDay:
+      type: number
+      description: Last day of the streak stored as a UNIX timestamp or numeric day
+      example: 1585337827953
     aboutmeParsed:
       type: string
     age:
@@ -597,6 +615,14 @@ UserObjectSlim:
       type: string
       description: An ISO 8601 formatted date string representing the moment a ban will be lifted, or the words "Not Banned"
       example: Not Banned
+    streak:
+      type: number
+      description: Consecutive-day posting streak count
+      example: 3
+    streakLastDay:
+      type: number
+      description: Last day of the streak stored as a UNIX timestamp or numeric day
+      example: 1585337827953
 UserObjectACP:
   type: object
   required:
@@ -685,6 +711,14 @@ UserObjectACP:
       type: string
       description: An ISO 8601 formatted date string representing the moment a ban will be lifted, or the words "Not Banned"
       example: Not Banned
+    streak:
+      type: number
+      description: Consecutive-day posting streak count
+      example: 3
+    streakLastDay:
+      type: number
+      description: Last day of the streak stored as a UNIX timestamp or numeric day
+      example: 1585337827953
     administrator:
       type: boolean
     ip:
