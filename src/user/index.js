@@ -41,6 +41,7 @@ require('./info')(User);
 require('./online')(User);
 require('./blocks')(User);
 require('./uploads')(User);
+require('./streaks')(User);
 
 User.exists = async function (uids) {
 	const singular = !Array.isArray(uids);
