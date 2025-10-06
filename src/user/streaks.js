@@ -2,6 +2,8 @@
 
 const { CronJob } = require('cron');
 
+let job;
+
 module.exports = function (User) {
 	const db = require('../database');
 	const plugins = require('../plugins');
@@ -10,7 +12,7 @@ module.exports = function (User) {
 	// Runs daily shortly after midnight UTC and resets streaks for users
 	// whose last recorded streak day is older than yesterday (i.e. they broke
 	// the consecutive-day posting streak by not posting yesterday).
-	new CronJob('5 0 * * *', async () => {
+	job = new CronJob('5 0 * * *', async () => {
 		try {
 			const now = Date.now();
 			const oneDay = 24 * 60 * 60 * 1000;
@@ -40,22 +42,27 @@ module.exports = function (User) {
 			const usersDataBatches = await Promise.all(slices.map(slice => User.getUsersFields(slice, ['uid', 'streak', 'streakLastDay'])));
 
 			// Prepare bulk update promises
-			const bulkPromises = usersDataBatches.map((usersData) => {
+			const bulkPromises = usersDataBatches.map(async (usersData) => {
 				const updates = [];
 				usersData.forEach((u) => {
 					if (!u || !u.uid) return;
 					const currentStreak = parseInt(u.streak, 10) || 0;
 					const lastDay = parseInt(u.streakLastDay, 10) || 0;
+					console.log(`User ${u.uid} has streak ${currentStreak} last updated on ${new Date(lastDay).toISOString().slice(0, 10)}`);
 
 					if (currentStreak > 0 && lastDay < yesterdayStart) {
-						const key = `user${activitypub.helpers.isUri(u.uid) ? 'Remote' : ''}:${u.uid}`;
+						console.log(`Resetting streak for user ${u.uid}`);
+						const key = activitypub.helpers.isUri(u.uid) ? `userRemote:${u.uid}` : `user:${u.uid}`;
 						updates.push([key, { streak: 0, streakLastDay: 0 }]);
 					}
 				});
 
 				if (updates.length) {
-					return db.setObjectBulk(updates);
+					console.log('Bulk updating:', updates);
+					await Promise.all(updates.map(([key, data]) => db.setObject(key, data)));
+					console.log('Bulk update done');
 				}
+
 				return Promise.resolve();
 			});
 
@@ -66,3 +73,6 @@ module.exports = function (User) {
 		}
 	}, null, true);
 };
+
+// expose job instance for testing
+module.exports._getJob = () => job;
