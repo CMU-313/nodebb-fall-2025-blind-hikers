@@ -55,6 +55,12 @@ get:
                           type: string
                         postcount:
                           type: number
+                        streak:
+                          type: number
+                          description: Consecutive-day posting streak count
+                        streakLastDay:
+                          type: number
+                          description: Last day of the streak stored as a UNIX timestamp or numeric day
                         reputation:
                           type: number
                         email:confirmed:
