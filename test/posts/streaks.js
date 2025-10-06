@@ -5,6 +5,7 @@ const assert = require('assert');
 const topics = require('../../src/topics');
 const user = require('../../src/user');
 const categories = require('../../src/categories');
+const cron = require('cron');
 
 describe('User posting streaks', () => {
 	let uid;
@@ -50,5 +51,41 @@ describe('User posting streaks', () => {
 		const streakLastDay = await user.getUserField(uid, 'streakLastDay');
 		assert.strictEqual(parseInt(streak, 10), 1);
 		assert.strictEqual(parseInt(streakLastDay, 10), day4);
+	});
+
+	it('cronjob should reset stale streaks to 0', async () => {
+		const uid2 = await user.create({ username: 'streakcronuser' });
+		// set a streak that is older than yesterday
+		await user.setUserFields(uid2, { streak: 5, streakLastDay: day1 });
+
+		// Monkey-patch cron.CronJob to capture the scheduled callback
+		const OriginalCronJob = cron.CronJob;
+		let capturedOnTick = null;
+		cron.CronJob = function (cronTime, onTick, onComplete, start) {
+			capturedOnTick = onTick;
+			// return a minimal mock with start/stop so module init doesn't break
+			return { start: () => {}, stop: () => {} };
+		};
+
+		// Require and initialize the streaks module (it will use our mocked CronJob)
+		require('../../src/user/streaks')(user);
+
+		// Ensure we captured the callback and run it
+		if (!capturedOnTick) {
+			// restore CronJob and fail the test
+			cron.CronJob = OriginalCronJob;
+			throw new Error('Failed to capture CronJob callback');
+		}
+
+		// Invoke the cron callback (it is async)
+		await capturedOnTick();
+
+		// restore original CronJob implementation
+		cron.CronJob = OriginalCronJob;
+
+		const newStreak = await user.getUserField(uid2, 'streak');
+		const newStreakLastDay = await user.getUserField(uid2, 'streakLastDay');
+		assert.strictEqual(parseInt(newStreak, 10), 0);
+		assert.strictEqual(parseInt(newStreakLastDay, 10), 0);
 	});
 });
