@@ -41,6 +41,7 @@ require('./info')(User);
 require('./online')(User);
 require('./blocks')(User);
 require('./uploads')(User);
+require('./streaks')(User);
 
 User.exists = async function (uids) {
 	const singular = !Array.isArray(uids);
@@ -89,6 +90,7 @@ User.getUsers = async function (uids, uid) {
 	const userData = await User.getUsersWithFields(uids, [
 		'uid', 'username', 'userslug', 'picture', 'status',
 		'postcount', 'reputation', 'email:confirmed', 'lastonline',
+		'streak', 'streakLastDay',
 		'flags', 'banned', 'banned:expire', 'joindate',
 	], uid);
 
