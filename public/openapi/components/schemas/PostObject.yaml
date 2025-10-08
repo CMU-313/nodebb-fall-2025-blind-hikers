@@ -28,6 +28,9 @@ PostObject:
       type: number
     deleted:
       type: boolean
+    anonymous:
+      type: number
+      description: Whether this post is anonymous (1) or not (0)
     upvotes:
       type: number
     downvotes:
@@ -176,6 +179,9 @@ PostDataObject:
           type: number
         deleted:
           type: number
+        anonymous:
+          type: number
+          description: Whether this post is anonymous (1) or not (0)
         upvotes:
           type: number
         downvotes:

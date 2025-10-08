@@ -1268,6 +1268,81 @@ describe('Posts\'', async () => {
 		files = await file.walk(path.resolve(__dirname, './posts'));
 	});
 
+	describe('Anonymous Posts', () => {
+		let anonymousUid;
+		let anonymousPostData;
+		let anonymousTopicData;
+		let cid;
+
+		before(async () => {
+			anonymousUid = await user.create({ username: 'anonymousposter' });
+			({ cid } = await categories.create({
+				name: 'Test Category for Anonymous Posts',
+				description: 'Test category for anonymous posting',
+			}));
+		});
+
+		it('should create an anonymous post', async () => {
+			const result = await topics.post({
+				uid: anonymousUid,
+				cid: cid,
+				title: 'Anonymous Test Topic',
+				content: 'This is an anonymous post',
+				anonymous: true,
+			});
+			anonymousTopicData = result.topicData;
+			anonymousPostData = result.postData;
+
+			assert(anonymousPostData);
+			assert.strictEqual(anonymousPostData.anonymous, 1);
+			assert.strictEqual(anonymousPostData.uid, anonymousUid);
+		});
+
+		it('should display anonymous user data when retrieving post', async () => {
+			const topicPosts = await topics.getTopicPosts(anonymousTopicData, 'tid:' + anonymousTopicData.tid + ':posts', 0, 0, anonymousUid, false);
+			assert(topicPosts.length > 0);
+			const post = topicPosts[0];
+			assert.strictEqual(post.user.username, 'Anonymous');
+			assert.strictEqual(post.user.displayname, 'Anonymous');
+			assert.strictEqual(post.user.uid, 0);
+		});
+
+		it('should create an anonymous reply', async () => {
+			const replyData = await topics.reply({
+				uid: anonymousUid,
+				tid: anonymousTopicData.tid,
+				content: 'This is an anonymous reply',
+				anonymous: true,
+			});
+
+			assert(replyData);
+			assert.strictEqual(replyData.anonymous, 1);
+			assert.strictEqual(replyData.uid, anonymousUid);
+		});
+
+		it('should retrieve anonymous flag from database', async () => {
+			const postFields = await posts.getPostFields(anonymousPostData.pid, ['anonymous', 'uid']);
+			assert.strictEqual(postFields.anonymous, 1);
+			assert.strictEqual(postFields.uid, anonymousUid);
+		});
+
+		it('should handle non-anonymous posts correctly', async () => {
+			const result = await topics.post({
+				uid: anonymousUid,
+				cid: cid,
+				title: 'Non-Anonymous Test Topic',
+				content: 'This is a regular post',
+				anonymous: false,
+			});
+
+			const topicPosts = await topics.getTopicPosts(result.topicData, 'tid:' + result.topicData.tid + ':posts', 0, 0, anonymousUid, false);
+			assert(topicPosts.length > 0);
+			const post = topicPosts[0];
+			assert.strictEqual(post.user.username, 'anonymousposter');
+			assert.strictEqual(post.user.uid, anonymousUid);
+		});
+	});
+
 	it('subfolder tests', () => {
 		files.forEach((filePath) => {
 			require(filePath);
