@@ -149,6 +149,18 @@ module.exports = function (Topics) {
 				// Add reaction data
 				postObj.reactions = reactions[postObj.pid] || {};
 
+				// Handle anonymous posts
+				if (postObj.anonymous) {
+					postObj.user = {
+						username: 'Anonymous',
+						displayname: 'Anonymous',
+						picture: '',
+						icon: { text: 'A', bgColor: '#888888' },
+						uid: 0,
+						userslug: '',
+					};
+				}
+
 				// Username override for guests, if enabled
 				if (meta.config.allowGuestHandles && postObj.uid === 0 && postObj.handle) {
 					postObj.user.username = validator.escape(String(postObj.handle));
