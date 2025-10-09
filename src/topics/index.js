@@ -83,6 +83,12 @@ Topics.getTopicsByTids = async function (tids, options) {
 			return postData.map(p => p.handle);
 		}
 
+		async function loadAnonymousTopics() {
+			const mainPids = topics.map(t => t.mainPid);
+			const postData = await posts.getPostsFields(mainPids, ['pid', 'anonymous']);
+			return postData.map(p => p.anonymous);
+		}
+
 		async function loadShowfullnameSettings() {
 			if (meta.config.hideFullname) {
 				return uids.map(() => ({ showfullname: false }));
@@ -94,12 +100,13 @@ Topics.getTopicsByTids = async function (tids, options) {
 			return data;
 		}
 
-		const [teasers, users, userSettings, categoriesData, guestHandles, thumbs] = await Promise.all([
+		const [teasers, users, userSettings, categoriesData, guestHandles, anonymousTopics, thumbs] = await Promise.all([
 			Topics.getTeasers(topics, options),
 			user.getUsersFields(uids, ['uid', 'username', 'fullname', 'userslug', 'reputation', 'postcount', 'picture', 'signature', 'banned', 'status']),
 			loadShowfullnameSettings(),
 			categories.getCategoriesFields(cids, ['cid', 'name', 'slug', 'icon', 'backgroundImage', 'imageClass', 'bgColor', 'color', 'disabled']),
 			loadGuestHandles(),
+			loadAnonymousTopics(),
 			Topics.thumbs.load(topics),
 		]);
 
@@ -116,6 +123,7 @@ Topics.getTopicsByTids = async function (tids, options) {
 			usersMap: _.zipObject(uids, users),
 			categoriesMap: _.zipObject(cids, categoriesData),
 			tidToGuestHandle: _.zipObject(guestTopics.map(t => t.tid), guestHandles),
+			anonymousTopics,
 			thumbs,
 		};
 	}
@@ -134,6 +142,23 @@ Topics.getTopicsByTids = async function (tids, options) {
 			topic.thumbs = result.thumbs[i];
 			topic.category = result.categoriesMap[topic.cid];
 			topic.user = topic.uid ? result.usersMap[topic.uid] : { ...result.usersMap[topic.uid] };
+			
+			// Handle anonymous topics
+			if (result.anonymousTopics[i]) {
+				topic.user = {
+					username: 'Anonymous',
+					displayname: 'Anonymous',
+					picture: null,
+					'icon:text': 'A',
+					'icon:bgColor': '#888888',
+					uid: 0,
+					userslug: '',
+					isLocal: true,
+					status: 'offline',
+					anonymous: true,
+				};
+			}
+			
 			if (result.tidToGuestHandle[topic.tid]) {
 				topic.user.username = validator.escape(result.tidToGuestHandle[topic.tid]);
 				topic.user.displayname = topic.user.username;
