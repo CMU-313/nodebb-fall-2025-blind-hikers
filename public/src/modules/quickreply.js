@@ -61,10 +61,12 @@ define('quickreply', [
 			}
 
 			const replyMsg = components.get('topic/quickreply/text').val();
+			const isAnonymous = components.get('topic/quickreply/container').find('#quickreply-anonymous').is(':checked');
 			const replyData = {
 				tid: ajaxify.data.tid,
 				handle: undefined,
 				content: replyMsg,
+				anonymous: isAnonymous,
 			};
 			const replyLen = replyMsg.length;
 			if (replyLen < parseInt(config.minimumPostLength, 10)) {

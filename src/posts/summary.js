@@ -59,10 +59,14 @@ module.exports = function (Posts) {
 				post.user = {
 					username: 'Anonymous',
 					displayname: 'Anonymous',
-					picture: '',
-					icon: { text: 'A', bgColor: '#888888' },
+					picture: null,
+					'icon:text': 'A',
+					'icon:bgColor': '#888888',
 					uid: 0,
 					userslug: '',
+					isLocal: true,
+					status: 'offline',
+					anonymous: true,
 				};
 			}
 			

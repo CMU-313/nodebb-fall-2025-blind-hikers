@@ -154,10 +154,14 @@ module.exports = function (Topics) {
 					postObj.user = {
 						username: 'Anonymous',
 						displayname: 'Anonymous',
-						picture: '',
-						icon: { text: 'A', bgColor: '#888888' },
+						picture: null,
+						'icon:text': 'A',
+						'icon:bgColor': '#888888',
 						uid: 0,
 						userslug: '',
+						isLocal: true,
+						status: 'offline',
+						anonymous: true,
 					};
 				}
 
