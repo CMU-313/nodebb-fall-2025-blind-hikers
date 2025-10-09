@@ -2,15 +2,130 @@ PostsObject:
   description: One of the objects in the array returned from `Posts.getPostSummaryByPids`
   type: array
   items:
-    allOf:
-      - $ref: ./PostObject.yaml#/PostObject
-      - type: object
-        description: Optional properties that may or may not be present (except for `pid`, which is always present, and is only here as a hack to pass validation)
+    type: object
+    properties:
+      pid:
+        type: number
+        description: A post identifier
+      tid:
+        type: number
+        description: A topic identifier
+      toPid:
+        type: number
+        description: The post that this post is in reply to
+        nullable: true
+      url:
+        type: string
+        description: A permalink to the post content
+      content:
+        type: string
+      sourceContent:
+        type: string
+        nullable: true
+      uid:
+        type: number
+        description: A user identifier
+      timestamp:
+        type: number
+      deleted:
+        type: boolean
+      anonymous:
+        type: number
+        description: Whether this post is anonymous (1) or not (0)
+      upvotes:
+        type: number
+      downvotes:
+        type: number
+      votes:
+        type: number
+      timestampISO:
+        type: string
+        description: An ISO 8601 formatted date string
+      user:
+        type: object
         properties:
-          pid:
+          uid:
             type: number
-            description: A post identifier
-          attachments:
-            type: array
-        required:
-          - pid
+          isLocal:
+            type: boolean
+          username:
+            type: string
+          displayname:
+            type: string
+          userslug:
+            type: string
+          picture:
+            type: string
+            nullable: true
+          status:
+            type: string
+          "icon:text":
+            type: string
+          "icon:bgColor":
+            type: string
+      topic:
+        type: object
+        properties:
+          uid:
+            type: number
+          tid:
+            type: number
+          title:
+            type: string
+          cid:
+            type: number
+          slug:
+            type: string
+          deleted:
+            type: number
+          scheduled:
+            type: number
+          timestamp:
+            type: number
+          timestampISO:
+            type: string
+          postcount:
+            type: number
+          mainPid:
+            type: number
+          teaserPid:
+            type: number
+            nullable: true
+          titleRaw:
+            type: string
+          oldTitle:
+            type: string
+          isMainPost:
+            type: boolean
+          renamed:
+            type: boolean
+      category:
+        type: object
+        properties:
+          cid:
+            type: number
+          name:
+            type: string
+          icon:
+            type: string
+          slug:
+            type: string
+          parentCid:
+            type: number
+          bgColor:
+            type: string
+          color:
+            type: string
+          backgroundImage:
+            nullable: true
+          imageClass:
+            nullable: true
+            type: string
+      isMainPost:
+        type: boolean
+      replies:
+        type: number
+      attachments:
+        type: array
+    required:
+      - pid
