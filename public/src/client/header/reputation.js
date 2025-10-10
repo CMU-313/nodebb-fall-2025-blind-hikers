@@ -59,13 +59,13 @@ define('forum/header/reputation', [
 		const heatmapContainer = $('[component="reputation/heatmap"]');
 		heatmapContainer.empty();
 
-		// Create heatmap for the last 365 days
+		// Create heatmap for the last 180 days (6 months)
 		const today = new Date();
-		const oneYearAgo = new Date(today);
-		oneYearAgo.setDate(today.getDate() - 365);
+		const sixMonthsAgo = new Date(today);
+		sixMonthsAgo.setDate(today.getDate() - 180);
 
 		// Generate heatmap HTML
-		const heatmapHtml = generateHeatmapHTML(oneYearAgo, today, activityMap);
+		const heatmapHtml = generateHeatmapHTML(sixMonthsAgo, today, activityMap);
 		heatmapContainer.html(heatmapHtml);
 	}
 
