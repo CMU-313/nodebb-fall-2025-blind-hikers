@@ -1,13 +1,11 @@
 'use strict';
 
-define('forum/header/reputation', [
-	'components', 'hooks', 'api',
-], function (components, hooks, api) {
+define('forum/header/reputation', [], function () {
 	const reputation = {};
 
 	reputation.prepareDOM = function () {
 		const reputationToggleEl = $('[component="reputation/dropdown"]');
-		reputationToggleEl.on('show.bs.dropdown', async (ev) => {
+		reputationToggleEl.on('show.bs.dropdown', async () => {
 			await loadReputationData();
 		});
 
@@ -93,7 +91,7 @@ define('forum/header/reputation', [
 				date: dateStr,
 				count: count,
 				hasActivity: hasActivity,
-				day: currentDate.getDay()
+				day: currentDate.getDay(),
 			});
 
 			if (currentDate.getDay() === 6) {
