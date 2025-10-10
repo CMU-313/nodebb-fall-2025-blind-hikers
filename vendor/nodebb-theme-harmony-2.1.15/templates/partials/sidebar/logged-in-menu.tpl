@@ -18,6 +18,10 @@
 </li>
 {{{ end }}}
 
+<li class="nav-item mx-2 reputation dropstart" title="Reputation" role="menuitem">
+<!-- IMPORT partials/sidebar/reputation.tpl -->
+</li>
+
 <li component="sidebar/drafts" class="nav-item mx-2 drafts dropstart" title="[[global:header.drafts]]" role="menuitem">
 <!-- IMPORT partials/sidebar/drafts.tpl -->
 </li>

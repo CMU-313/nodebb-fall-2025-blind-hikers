@@ -4,8 +4,9 @@ define('forum/header', [
 	'forum/header/unread',
 	'forum/header/notifications',
 	'forum/header/chat',
+	'forum/header/reputation',
 	'alerts',
-], function (unread, notifications, chat, alerts) {
+], function (unread, notifications, chat, reputation, alerts) {
 	const module = {};
 
 	module.prepareDOM = function () {
@@ -14,6 +15,7 @@ define('forum/header', [
 		}
 		notifications.prepareDOM();
 		chat.prepareDOM();
+		reputation.prepareDOM();
 		handleStatusChange();
 		createHeaderTooltips();
 		handleLogout();
