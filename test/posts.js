@@ -1343,6 +1343,111 @@ describe('Posts\'', async () => {
 		});
 	});
 
+	describe('Post Reactions', () => {
+		let reactionUid;
+		let reactionPostData;
+		let reactionTopicData;
+		let cid;
+
+		before(async () => {
+			reactionUid = await user.create({ username: 'reactionuser' });
+			({ cid } = await categories.create({
+				name: 'Test Category for Reactions',
+				description: 'Test category for reactions',
+			}));
+			
+			const result = await topics.post({
+				uid: reactionUid,
+				cid: cid,
+				title: 'Test Reactions Topic',
+				content: 'This is a test post for reactions',
+			});
+			reactionTopicData = result.topicData;
+			reactionPostData = result.postData;
+		});
+
+		it('should add a thumbs-up reaction', async () => {
+			const result = await posts.reaction(reactionPostData.pid, reactionUid, 'thumbs-up');
+			
+			assert(result);
+			assert.strictEqual(result.reaction, 'thumbs-up');
+			assert.strictEqual(result.count, 1);
+			assert.strictEqual(result.hasReacted, true);
+		});
+
+		it('should check if user has reacted', async () => {
+			const hasReacted = await posts.hasReacted(reactionPostData.pid, reactionUid, 'thumbs-up');
+			assert.strictEqual(hasReacted, true);
+		});
+
+		it('should remove a reaction when toggled again', async () => {
+			const result = await posts.reaction(reactionPostData.pid, reactionUid, 'thumbs-up');
+			
+			assert(result);
+			assert.strictEqual(result.count, 0);
+			assert.strictEqual(result.hasReacted, false);
+		});
+
+		it('should add multiple different reactions', async () => {
+			await posts.reaction(reactionPostData.pid, reactionUid, 'thumbs-up');
+			await posts.reaction(reactionPostData.pid, reactionUid, 'heart');
+			await posts.reaction(reactionPostData.pid, reactionUid, 'smile');
+
+			const hasThumbsUp = await posts.hasReacted(reactionPostData.pid, reactionUid, 'thumbs-up');
+			const hasHeart = await posts.hasReacted(reactionPostData.pid, reactionUid, 'heart');
+			const hasSmile = await posts.hasReacted(reactionPostData.pid, reactionUid, 'smile');
+
+			assert.strictEqual(hasThumbsUp, true);
+			assert.strictEqual(hasHeart, true);
+			assert.strictEqual(hasSmile, true);
+		});
+
+		it('should get reactions by pids', async () => {
+			const reactions = await posts.getReactionsByPids([reactionPostData.pid], reactionUid);
+			
+			assert(reactions[reactionPostData.pid]);
+			assert.strictEqual(reactions[reactionPostData.pid]['thumbs-up'].count, 1);
+			assert.strictEqual(reactions[reactionPostData.pid]['thumbs-up'].hasReacted, true);
+			assert.strictEqual(reactions[reactionPostData.pid]['heart'].count, 1);
+			assert.strictEqual(reactions[reactionPostData.pid]['heart'].hasReacted, true);
+			assert.strictEqual(reactions[reactionPostData.pid]['smile'].count, 1);
+			assert.strictEqual(reactions[reactionPostData.pid]['smile'].hasReacted, true);
+		});
+
+		it('should handle multiple users reacting', async () => {
+			const otherUid = await user.create({ username: 'reactionuser2' });
+			
+			await posts.reaction(reactionPostData.pid, otherUid, 'thumbs-up');
+			
+			const reactions = await posts.getReactionsByPids([reactionPostData.pid], reactionUid);
+			assert.strictEqual(reactions[reactionPostData.pid]['thumbs-up'].count, 2);
+		});
+
+		it('should reject invalid reaction types', async () => {
+			try {
+				await posts.reaction(reactionPostData.pid, reactionUid, 'invalid-reaction');
+				assert.fail('Should have thrown an error');
+			} catch (err) {
+				assert.strictEqual(err.message, '[[error:invalid-reaction-type]]');
+			}
+		});
+
+		it('should return false for guest users hasReacted', async () => {
+			const hasReacted = await posts.hasReacted(reactionPostData.pid, 0, 'thumbs-up');
+			assert.strictEqual(hasReacted, false);
+		});
+
+		it('should include reaction data when retrieving posts', async () => {
+			const topicPosts = await topics.getTopicPosts(reactionTopicData, 'tid:' + reactionTopicData.tid + ':posts', 0, 0, reactionUid, false);
+			
+			assert(topicPosts.length > 0);
+			const post = topicPosts[0];
+			assert(post.reactions);
+			assert(post.reactions['thumbs-up']);
+			assert(post.reactions['thumbs-up'].count >= 1);
+		});
+	});
+
 	it('subfolder tests', () => {
 		files.forEach((filePath) => {
 			require(filePath);
