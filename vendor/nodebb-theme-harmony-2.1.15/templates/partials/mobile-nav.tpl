@@ -49,15 +49,19 @@
 				<!-- IMPORT partials/sidebar/notifications.tpl -->
 				</li>
 
-				{{{ if canChat }}}
-				<li class="nav-item m-0 chats">
-				<!-- IMPORT partials/sidebar/chats.tpl -->
-				</li>
-				{{{ end }}}
+			{{{ if canChat }}}
+			<li class="nav-item m-0 chats">
+			<!-- IMPORT partials/sidebar/chats.tpl -->
+			</li>
+			{{{ end }}}
 
-				<li component="sidebar/drafts" class="hidden nav-item m-0 drafts">
-				<!-- IMPORT partials/sidebar/drafts.tpl -->
-				</li>
+			<li class="nav-item m-0 reputation">
+			<!-- IMPORT partials/sidebar/reputation.tpl -->
+			</li>
+
+			<li component="sidebar/drafts" class="hidden nav-item m-0 drafts">
+			<!-- IMPORT partials/sidebar/drafts.tpl -->
+			</li>
 
 				<li id="user_label" class="nav-item m-0 usermenu">
 				<!-- IMPORT partials/sidebar/user-menu.tpl -->
