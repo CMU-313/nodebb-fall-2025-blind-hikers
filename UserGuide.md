@@ -20,7 +20,7 @@ This feature allows users to create posts anonymously, so their name is not publ
 ### Automated Testing
 Test File: test/post.js (lines 1271 - 1345)
 
-CLI Test Command: npm run test -- test/posts.js
+CLI Test Command: npm test — —grep “Anonymous Posts”
 ### User Testing
 To test the anonymous posting functionality, navigate to creating a new post. On the bar with text options, there is a checkbox labeled with "Anonymous". Publishing a post with this box checked will create an anonymous post, with the author as "Anonymous". Leaving the box unchecked will allow the author's name to be visible when the post is published. Post teasers, previews, and topic lists also show "Anonymous", and the user's profile icon is replaced with a gray "A" avatar. 
 ### Test Coverage
