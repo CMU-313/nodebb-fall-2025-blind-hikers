@@ -5,29 +5,33 @@ You should also provide a link/description of where your added automated tests c
 
 ## Emoji Reactions
 This feature allows users to react to posts with emojis, to supplement the upvote/downvote system. Users can react with 3 emojis, and the running count of previous reactions is tracked. 
-
-Test File: test/posts.js
 ### Automated Testing
+Test File: test/posts.js (lines 1346 - 1450)
+
 CLI Test Command: npm test -- --grep "Post Reactions"
 ### User Testing
-
+Testing the emoji reactions on the NodeBB website requires navigating to a post, and hovering over the bottom portion of the post until a bar with various icons appear. On the bar, test functionality of the three emoji reactions by clicking on them to select and deselect, and watch as their respective counters update accordingly. Each emoji icon should also display a brief description of the emoji when hovering over the icon. 
 ### Test Coverage
-Automated tests cover basic operations such as adding reactions, removing reactions, checking if a user has reacted to a post, and accurate running counts for each reaction.
+Automated tests cover basic operations such as adding reactions, removing reactions, checking if a user has reacted to a post, and accurate running counts for each reaction. Tests also account for users potentially reacting with invalid reaction types, and ensuring that reaction data is included when post data is retrieved. These tests comprehensively cover all actions and logic paths that users can take when interacting with emoji reactions, including edge cases and integration with existing NodeBB APIs. 
 
 ## Posting Anonymously
 This feature allows users to create posts anonymously, so their name is not public. When creating a post, users can designate their post to be anonymous, and their name is replaced with "Anonymous". 
 
-Test File: test/post.js
 ### Automated Testing
+Test File: test/post.js (lines 1271 - 1345)
+
 CLI Test Command: npm run test -- test/posts.js
 ### User Testing
+To test the anonymous posting functionality, navigate to creating a new post. On the bar with text options, there is a checkbox labeled with "Anonymous". Publishing a post with this box checked will create an anonymous post, with the author as "Anonymous". Leaving the box unchecked will allow the author's name to be visible when the post is published. Post teasers, previews, and topic lists also show "Anonymous", and the user's profile icon is replaced with a gray "A" avatar. 
 ### Test Coverage
+The test suite covers a variety of functionality relating to this feature. It includes creating anonymous posts and replies, accurately anonymizing user data when requesting, and ensuring changes are persisted in the database. In addition, tests check that non-designated posts correctly show author information, as a regression check. These tests cover all cases for users creating and interacting with an anonymous post, and functionality was later verified manually with curl commands and browser console logs. 
 
 ## Posting Streak Counter
 This feature allows users to record the number of consecutive days they post, to track their posting habits. Streaks increase when users post in consecutive days, and break when users miss posting on a day. 
 
-Test File: test/posts/streaks.js
 ### Automated Testing
+Test File: test/posts/streaks.js
+
 CLI Test Command: npm run test -- test/posts/streaks.js
 ### User Testing
 To manually test streak functionality will need to span over multiple days, due to streaks being incremented when posts are made on consecutive days. Manual testing will involve posting on consecutive days to check for accurate increases in streaks, not posting on a day to ensure that the streak is reset to 0, and posting again on a new day to test that the streak correctly restarts at 1. 
