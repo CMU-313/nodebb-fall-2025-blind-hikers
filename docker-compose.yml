@@ -1,5 +1,6 @@
 services:
   nodebb:
+    user: "0"
     build: .
     # image: ghcr.io/nodebb/nodebb:latest
     restart: unless-stopped
