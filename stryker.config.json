@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "npm",
+  "reporters": [
+    "html",
+    "clear-text",
+    "progress"
+  ],
+  "testRunner": "command",
+  "commandRunner": {
+    "command": "mocha stryker-test.spec.js"
+  },
+  "coverageAnalysis": "perTest",
+  "mutate": [
+    "stryker-test.js"
+  ],
+  "ignorePatterns": [
+    "src/**",
+    "test/**",
+    "build/**",
+    "node_modules/**",
+    "vendor/**",
+    "public/**",
+    "install/**",
+    "*.md",
+    "*.json",
+    "*.yml",
+    "*.yaml"
+  ],
+  "tempDirName": ".stryker-tmp"
+}
