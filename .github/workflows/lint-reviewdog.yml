@@ -14,19 +14,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Debug - Check directory
-        run: |
-          pwd
-          ls -la
-          cat package.json | head -5
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          if [ ! -f package.json ]; then
+            echo "ERROR: package.json not found in $(pwd)"
+            ls -la
+            exit 1
+          fi
+          npm install
 
       - name: Setup reviewdog
         uses: reviewdog/action-setup@v1
