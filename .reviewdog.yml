@@ -1,0 +1,8 @@
+runner:
+  eslint:
+    cmd: npm run lint 2>&1
+    errorformat:
+      - '%f:%l:%c: %trror %m'
+      - '%f:%l:%c: %tarning %m'
+    level: warning
+
