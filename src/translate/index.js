@@ -1,16 +1,50 @@
-/* eslint-disable strict */
-//var request = require('request');
+'use strict';
+
+const winston = require('winston');
 
 const translatorApi = module.exports;
 
-translatorApi.translate = function (postData) {
-	return ['is_english',postData];
+const fetchFn = typeof global.fetch === 'function' ? global.fetch.bind(global) : async (...args) => {
+	const { default: fetch } = await import('node-fetch');
+	return fetch(...args);
 };
 
-// translatorApi.translate = async function (postData) {
-//  Edit the translator URL below
-//  const TRANSLATOR_API = "TODO"
-//  const response = await fetch(TRANSLATOR_API+'/?content='+postData.content);
-//  const data = await response.json();
-//  return ['is_english','translated_content'];
-// };
+function getTranslatorBaseUrl() {
+	return (process.env.TRANSLATOR_SERVICE_URL || 'http://host.docker.internal:5000/translate/').trim();
+}
+
+translatorApi.translate = async function (postData = {}) {
+	const content = (postData.content || '').toString();
+
+	// Short-circuit empty posts to avoid unnecessary network calls.
+	if (!content.trim()) {
+		return [true, content];
+	}
+
+	const baseUrl = getTranslatorBaseUrl();
+
+	try {
+		const response = await fetchFn(baseUrl, {
+			method: 'POST',
+			headers: {
+				accept: 'application/json',
+				'content-type': 'application/json',
+			},
+			body: JSON.stringify({ content }),
+		});
+
+		if (!response.ok) {
+			throw new Error(`Unexpected status ${response.status}`);
+		}
+
+		const data = await response.json();
+
+		const isEnglish = typeof data.is_english === 'boolean' ? data.is_english : true;
+		const translated = typeof data.translated_content === 'string' ? data.translated_content : content;
+
+		return [isEnglish, translated];
+	} catch (err) {
+		winston.warn(`[translator] Fallback to original content due to error: ${err.message}`);
+		return [true, content];
+	}
+};
