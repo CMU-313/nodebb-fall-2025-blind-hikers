@@ -15,7 +15,7 @@ services:
       - nodebb-config:/opt/config
       - ./install/docker/setup.json:/usr/src/app/setup.json
     environment:
-      - TRANSLATOR_SERVICE_URL=http://translator:8080/translate/
+      - TRANSLATOR_SERVICE_URL=http://translator:5000/translate/
 
   mongo:
     image: 'mongo:7-jammy'
@@ -55,12 +55,22 @@ services:
     build:
       context: https://github.com/CMU-313/llm-experiment-microservice-blind-hikers.git#f25
     restart: unless-stopped
+    depends_on:
+      - ollama
     environment:
-      - PORT=8080
+      - PORT=5000
       # Point this at your running Ollama instance; adjust or remove if using a remote LLM.
       - OLLAMA_HOST=http://ollama:11434
     ports:
-      - '8080:8080'
+      - '8080:5000'
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama-data:/root/.ollama
+    ports:
+      - '11434:11434'
 
 volumes:
   mongo-data:
@@ -104,3 +114,5 @@ volumes:
       o: bind
       type: none
       device: ./.docker/config
+
+  ollama-data:
